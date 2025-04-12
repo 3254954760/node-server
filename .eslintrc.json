@@ -1,0 +1,47 @@
+{
+    "root": true,
+    "extends": [
+        "@ecomfe/eslint-config",
+        "@ecomfe/eslint-config/import",
+        "@ecomfe/eslint-config/react"
+    ],
+    "env": {
+        "jest": true
+    },
+    "rules": {
+        "import/no-unresolved": [
+            "error",
+            {
+                "ignore": ["@/*", "mockDir"]
+            }
+        ],
+        "comma-dangle": ["error", "never"],
+        "no-console": "off",
+        "no-useless-constructor": "off",
+        "arrow-parens": "off",
+        "no-use-before-define":"off",
+        "react/jsx-closing-tag-location":"off",
+        "react/no-array-index-key": "off",
+        "react/jsx-no-bind": "off",
+        "react/jsx-wrap-multilines": "off",
+        // "react-hooks/exhaustive-deps": "off",
+        // "@babel/object-curly-spacing": "off",
+        "@babel/new-cap": "off",
+        // 文件开头老是报这个错，没找到原因，先去掉
+        "no-unreachable-loop": "off",
+        "import/unambiguous": "off",
+        "no-unused-vars": [
+            "error",
+            {
+                "varsIgnorePattern": "React"
+            }
+        ],
+        "import/extensions": "off",
+        "import/order": [
+            "warn",
+            {
+                "groups": ["builtin", "external", "internal", "unknown", "parent", "sibling", "index"]
+            }
+        ]
+    }
+}
