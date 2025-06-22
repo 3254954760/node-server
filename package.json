@@ -6,9 +6,13 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "prebuild": "rimraf dist",
     "build": "tsc",
+    "postbuild": "echo \"构建完成，文件位于 dist/\"",
     "start": "node dist/app.js",
-    "dev": "nodemon --watch './src' -e ts --exec node --loader ts-node/esm ./src/app.ts"
+    "predev": "echo \"启动开发环境...\"",
+    "dev": "nodemon --watch './src' -e ts --exec node --loader ts-node/esm ./src/app.ts",
+    "postdev": "echo \"开发服务器已停止\""
   },
   "repository": {
     "type": "git",
