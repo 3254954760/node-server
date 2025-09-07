@@ -2,9 +2,10 @@
     "name": "ly-node-server",
     "version": "1.0.0",
     "description": "用于node服务开发",
-    "main": "app.ts",
-    "type": "module",
+    "main": "index.js",
     "scripts": {
+        "prepare": "husky install",
+        "node:dev": "open http://localhost:5050 & node index.js ",
         "test": "echo \"Error: no test specified\" && exit 1",
         "prebuild": "rimraf dist",
         "build": "tsc",
@@ -29,12 +30,25 @@
         "@types/express": "^5.0.1",
         "@types/node": "^22.14.1",
         "express": "^5.1.0",
+        "husky": "^8.0.0",
         "nodemon": "^3.1.9",
+        "browser-sync": "^3.0.4",
+        "ejs": "^3.1.10",
         "ts-node": "^10.9.2",
+        "marked": "^15.0.12",
         "ts-node-dev": "^2.0.0",
-        "typescript": "^5.8.3"
+        "typescript": "^5.8.3",
+        "prettier": "^3.6.2"
     },
     "dependencies": {
         "cross-env": "^7.0.3"
+    },
+    "lint-staged": {
+        "*.{js,jsx,tsx}": [
+            "prettier --write"
+        ],
+        "*.{css,scss,less}": [
+            "prettier --write"
+        ]
     }
 }

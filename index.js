@@ -1,0 +1,43 @@
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
+
+const { convertVideoToGif } = require("./src/ffemeng.js"); // 注意改成 .js
+const { MarkdownToHtml } = require("./src/markdown-to-html/index.js");
+const app = express();
+const PORT = process.env.PORT || 5050;
+
+app.get("/", (req, res) => {
+    res.send("Hello, JavaScript and Express!");
+});
+
+app.get("/gif", async (req, res) => {
+    try {
+        const mp4Path = path.join(__dirname, "test.mp4"); // 改后缀 mp4
+        const buffer = await convertVideoToGif(mp4Path);
+        res.setHeader("Content-Type", "image/gif");
+        res.send(buffer);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("转换失败: " + err.message);
+    }
+});
+
+app.get("/video", (req, res) => {
+    const filePath = path.join(__dirname, "test.mp4");
+
+    res.setHeader("Content-Type", "video/mp4");
+
+    const readStream = fs.createReadStream(filePath);
+    readStream.pipe(res);
+
+    readStream.on("error", (err) => {
+        console.error("文件读取错误:", err);
+        res.status(500).send("视频加载失败");
+    });
+});
+app.get("/markdown-to-html", MarkdownToHtml);
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}.`);
+});
