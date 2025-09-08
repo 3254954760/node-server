@@ -7,6 +7,16 @@ const { MarkdownToHtml } = require("./src/markdown-to-html/index.js");
 const { PlayVideo, DownloadVideo } = require("./src/video/index.js");
 const app = express();
 const PORT = process.env.PORT || 5050;
+const { createProxyMiddleware } = require("http-proxy-middleware");
+
+app.use(
+    "/api",
+    createProxyMiddleware({
+        target: "http://localhost:3000", // 目标服务器
+        changeOrigin: true, // 修改请求头中的 host
+        pathRewrite: { "^/api": "" }, // 可选：去掉前缀 /api
+    }),
+);
 
 app.get("/", (req, res) => {
     res.send("Hello, JavaScript and Express!");
