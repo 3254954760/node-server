@@ -8,7 +8,7 @@ const { PlayVideo, DownloadVideo } = require("./src/video/index.js");
 const app = express();
 const PORT = process.env.PORT || 5050;
 const { createProxyMiddleware } = require("http-proxy-middleware");
-
+const { sendEmail } = require("./src/email-server/index.js");
 app.use(
     "/api",
     createProxyMiddleware({
@@ -38,6 +38,8 @@ app.get("/play-video", PlayVideo);
 app.get("/download", DownloadVideo);
 
 app.get("/markdown-to-html", MarkdownToHtml);
+
+app.get("/send-email", sendEmail);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
