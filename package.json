@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "用于node服务开发",
     "main": "index.js",
+    "module": "esm",
     "scripts": {
         "prepare": "husky install",
         "node:dev": "open http://localhost:5050 & node index.js ",
@@ -41,12 +42,18 @@
         "typescript": "^5.8.3"
     },
     "dependencies": {
+        "class-transformer": "^0.5.1",
+        "class-validator": "^0.14.2",
         "cross-env": "^7.0.3",
         "http-proxy-middleware": "^3.0.5",
+        "inversify": "^2.0.0-rc.14",
+        "inversify-express-utils": "^6.5.0",
         "js-yaml": "^4.1.0",
         "knex": "^3.1.0",
         "mysql2": "^3.14.5",
-        "nodemailer": "^7.0.6"
+        "nodemailer": "^7.0.6",
+        "prisma": "^6.16.1",
+        "reflect-metadata": "^0.2.2"
     },
     "lint-staged": {
         "*.{js,jsx,tsx}": [
