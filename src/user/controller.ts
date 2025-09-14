@@ -3,25 +3,25 @@ import {
     httpGet as GetMapping,
     httpPost as PostMapping,
 } from "inversify-express-utils";
+import { UserService } from "@src/user/service.js";
 import { inject } from "inversify";
-import { UserService } from "./service";
 import type { Request, Response } from "express";
-@controller("/user") //路由
-export class UserController {
+import { JWT } from "@src/jwt/index.js";
+const { middleware } = new JWT();
+@controller("/user")
+export class User {
     constructor(
-        @inject(UserService) private readonly userService: UserService, //依赖注入
-    ) {}
-
-    @GetMapping("/index") //get请求
+        @inject(UserService) private readonly UserService: UserService,
+    ) { }
+    @GetMapping("/index", middleware()) //主要代码
     public async getIndex(req: Request, res: Response) {
-        console.log(req?.user.id);
-        const info = await this.userService.getUserInfo();
-        res.send(info);
+        let result = await this.UserService.getList();
+        res.send(result);
     }
 
-    @PostMapping("/create") //post请求
+    @PostMapping("/create")
     public async createUser(req: Request, res: Response) {
-        const user = await this.userService.createUser(req.body);
-        res.send(user);
+        let result = await this.UserService.createUser(req.body);
+        res.send(result);
     }
 }

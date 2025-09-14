@@ -1,37 +1,39 @@
 import "reflect-metadata";
 import { InversifyExpressServer } from "inversify-express-utils";
 import { Container } from "inversify";
-import { UserController } from "./src/user/controller";
-import { UserService } from "./src/user/service";
+import { User } from "@src/user/controller.js";
+import { UserService } from "@src/user/service.js";
 import express from "express";
 import { PrismaClient } from "@prisma/client";
-import { PrismaDB } from "./src/db";
-const container = new Container(); //Ioc搞个容器
+import { PrismaDB } from "@src/db/index.js";
+import { JWT } from "@src/jwt/index.js";
+const container = new Container();
 /**
- * prisma依赖注入
+ * user模块
  */
-//注入工厂封装db
+container.bind(User).to(User);
+container.bind(UserService).to(UserService);
+/**
+ *  封装PrismaClient
+ */
 container.bind<PrismaClient>("PrismaClient").toFactory(() => {
     return () => {
         return new PrismaClient();
     };
 });
-container.bind(PrismaDB).toSelf();
+container.bind(PrismaDB).to(PrismaDB);
 /**
- * user模块
+ * jwt模块
  */
-container.bind(UserService).to(UserService); //添加到容器
-container.bind(UserController).to(UserController); //添加到容器
-/**
- * post模块
- */
-const server = new InversifyExpressServer(container); //返回server
-//中间件编写在这儿
+container.bind(JWT).to(JWT); //主要代码
+
+const server = new InversifyExpressServer(container);
 server.setConfig((app) => {
-    app.use(express.json()); //接受json
+    app.use(express.json());
+    app.use(container.get(JWT).init()); //主要代码
 });
-const app = server.build(); //app就是express
+const app = server.build();
 
 app.listen(3000, () => {
-    console.log("http://localhost:3000");
+    console.log("Listening on port 3000");
 });

@@ -1,36 +1,32 @@
 import { injectable, inject } from "inversify";
-import { UserDto } from "./user.dto";
-import { plainToClass } from "class-transformer"; //dto验证
-import { validate } from "class-validator"; //dto验证
-import { PrismaDB } from "../db";
+import { PrismaDB } from "@src/db/index.js";
+import { UserDto } from "@src/user/user.dto.js";
+import { plainToClass } from "class-transformer";
+import { validate } from "class-validator";
+import { JWT } from "@src/jwt/index.js";
 @injectable()
 export class UserService {
     constructor(
-        @inject(PrismaDB) private readonly PrismaDB: PrismaDB, //依赖注入
-    ) {}
-
-    public async getUserInfo() {
+        @inject(PrismaDB) private readonly PrismaDB: PrismaDB,
+        @inject(JWT) private readonly jwt: JWT, //依赖注入
+    ) { }
+    public async getList() {
         return await this.PrismaDB.prisma.user.findMany();
     }
 
-    public async createUser(data: UserDto) {
-        const user = plainToClass(UserDto, data);
-        const errors = await validate(user);
-        const dto = [];
+    public async createUser(user: UserDto) {
+        let userDto = plainToClass(UserDto, user);
+        const errors = await validate(userDto);
         if (errors.length) {
-            errors.forEach((error) => {
-                Object.keys(error.constraints).forEach((key) => {
-                    dto.push({
-                        [error.property]: error.constraints[key],
-                    });
-                });
-            });
-            return dto;
+            return errors;
         } else {
-            const userInfo = await this.PrismaDB.prisma.user.create({
+            const result = await this.PrismaDB.prisma.user.create({
                 data: user,
             });
-            return userInfo;
+            return {
+                ...result,
+                token: this.jwt.createToken(result), //生成token
+            };
         }
     }
 }
