@@ -49,9 +49,11 @@
         "inversify": "^2.0.0-rc.14",
         "inversify-express-utils": "^6.5.0",
         "js-yaml": "^4.1.0",
+        "jsonwebtoken": "^9.0.2",
         "knex": "^3.1.0",
         "mysql2": "^3.14.5",
         "nodemailer": "^7.0.6",
+        "passport": "^0.7.0",
         "prisma": "^6.16.1",
         "reflect-metadata": "^0.2.2"
     },
