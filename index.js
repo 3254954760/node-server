@@ -9,6 +9,15 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { sendEmail } = require("./src/email-server/index.js");
+const {
+    getAllData,
+    getUserById,
+    createUser,
+    updataUser,
+    deleteUser,
+} = require("./src/dao/service.js");
+
+app.use(express.json());
 app.use(
     "/api",
     createProxyMiddleware({
@@ -40,6 +49,11 @@ app.get("/download", DownloadVideo);
 app.get("/markdown-to-html", MarkdownToHtml);
 
 app.get("/send-email", sendEmail);
+app.get("/all-user", getAllData);
+app.get("/user/:id", getUserById);
+app.post("/create", createUser);
+app.post("/update", updataUser);
+app.post("/delete", deleteUser);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);

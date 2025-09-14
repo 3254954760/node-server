@@ -1,0 +1,18 @@
+# POST http://localhost:5050/create HTTP/1.1
+# Content-Type: application/json
+
+# {
+#     "name":"张三",
+#     "age":18,
+#     "hobby": "看书"
+# }
+
+POST http://localhost:5050/update HTTP/1.1
+Content-Type: application/json
+
+{
+    "name":"张三法外狂徒",
+    "age":18,
+    "hobby": "看书",
+    "id": 1
+}
