@@ -50,6 +50,7 @@ app.get("/gif", async (req, res) => {
 });
 
 app.get("/play-video", PlayVideo);
+// express 支持range响应，实现分片下载/请求，后续看一下
 app.get("/download", DownloadVideo);
 
 app.get("/markdown-to-html", MarkdownToHtml);

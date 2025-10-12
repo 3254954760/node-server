@@ -25,15 +25,25 @@ const PlayVideo = (req, res) => {
 // 💾 下载视频（gzip 压缩，浏览器保存 .gz 文件）
 const DownloadVideo = (req, res) => {
     const filePath = path.join(__dirname, "test.mp4");
+
+    // content-type application/octet-stream 表示二进制流 application/json||pdf||mp4等等
+    // content-disposition 在网页打开图片或者视频 直接去预览而不是下载默认inline
+    // attachment = 文件当作一个附件去下载
+
+    // res.writeHead(200, {
+    //     "Content-Type": "application/octet-stream",
+    //     "Content-Disposition": "attachment; filename=test.mp4", // attachment = 强制下载
+    // });
+
     res.writeHead(200, {
-        "Content-Type": "application/octet-stream",
-        "Content-Disposition": "attachment; filename=test.mp4", // 注意是 .gz
+        "Content-Type": "video/mp4",
+        "Content-Disposition": "inline; filename=test.mp4", // inline 表示浏览器内预览
     });
 
     const readStream = fs.createReadStream(filePath);
-    const gzip = zlib.createGzip();
+    // const gzip = zlib.createGzip();
 
-    readStream.pipe(gzip).pipe(res);
+    readStream.pipe(res);
 
     readStream.on("error", (err) => {
         console.error("文件读取错误:", err);
