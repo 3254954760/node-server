@@ -9,23 +9,29 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { sendEmail } = require("./src/email-server/index.js");
+// 暂时注释掉数据库相关功能，避免连接错误
+// const {
+//     getAllData,
+//     getUserById,
+//     createUser,
+//     updataUser,
+//     deleteUser,
+// } = require("./src/dao/service.js");
 const {
-    getAllData,
-    getUserById,
-    createUser,
-    updataUser,
-    deleteUser,
-} = require("./src/dao/service.js");
+    upload,
+    uploadFile,
+    mergeFile,
+} = require("./src/upload-file/upload-file.js");
 
 app.use(express.json());
-app.use(
-    "/api",
-    createProxyMiddleware({
-        target: "http://localhost:3000", // 目标服务器
-        changeOrigin: true, // 修改请求头中的 host
-        pathRewrite: { "^/api": "" }, // 可选：去掉前缀 /api
-    }),
-);
+// app.use(
+//     "/api",
+//     createProxyMiddleware({
+//         target: "http://localhost:3000", // 目标服务器
+//         changeOrigin: true, // 修改请求头中的 host
+//         pathRewrite: { "^/api": "" }, // 可选：去掉前缀 /api
+//     }),
+// );
 
 app.get("/", (req, res) => {
     res.send("Hello, JavaScript and Express!");
@@ -49,11 +55,15 @@ app.get("/download", DownloadVideo);
 app.get("/markdown-to-html", MarkdownToHtml);
 
 app.get("/send-email", sendEmail);
-app.get("/all-user", getAllData);
-app.get("/user/:id", getUserById);
-app.post("/create", createUser);
-app.post("/update", updataUser);
-app.post("/delete", deleteUser);
+// 暂时注释掉数据库相关路由
+// app.get("/all-user", getAllData);
+// app.get("/user/:id", getUserById);
+// app.post("/create", createUser);
+// app.post("/update", updataUser);
+// app.post("/delete", deleteUser);
+// 文件上传路由
+app.post("/upload-file", upload.single("file"), uploadFile);
+app.post("/merge-file", mergeFile);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
