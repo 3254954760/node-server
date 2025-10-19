@@ -9,6 +9,11 @@ const app = express();
 const PORT = process.env.PORT || 5050;
 const { createProxyMiddleware } = require("http-proxy-middleware");
 const { sendEmail } = require("./src/email-server/index.js");
+const {
+    getQrCode,
+    ScanAuthlogin,
+    checkAuth,
+} = require("./src/scan_code_login/index.js");
 // 暂时注释掉数据库相关功能，避免连接错误
 // const {
 //     getAllData,
@@ -66,6 +71,10 @@ app.get("/send-email", sendEmail);
 app.post("/upload-file", upload.single("file"), uploadFile);
 app.post("/merge-file", mergeFile);
 
+// scan code login
+app.get("/get-qrcode", getQrCode);
+app.post("/scan-auth-login/:userId", ScanAuthlogin);
+app.get("/check-auth", checkAuth);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}.`);
 });
